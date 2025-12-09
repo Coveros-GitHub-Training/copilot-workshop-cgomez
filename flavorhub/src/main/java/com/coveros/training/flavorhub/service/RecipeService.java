@@ -3,9 +3,11 @@ package com.coveros.training.flavorhub.service;
 import com.coveros.training.flavorhub.model.Recipe;
 import com.coveros.training.flavorhub.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class RecipeService {
     
     private final RecipeRepository recipeRepository;
@@ -45,6 +48,37 @@ public class RecipeService {
     
     public void deleteRecipe(Long id) {
         recipeRepository.deleteById(id);
+    }
+    
+    /**
+     * Get the recipe of the day based on the current date
+     * Uses a deterministic algorithm so the same recipe is returned for the entire day
+     * The algorithm uses the day of year modulo the total number of recipes
+     * @return Optional containing the recipe of the day, or empty if no recipes exist
+     */
+    public Optional<Recipe> getDailyRecipe() {
+        try {
+            List<Recipe> allRecipes = recipeRepository.findAll();
+            
+            if (allRecipes.isEmpty()) {
+                log.warn("No recipes available for Recipe of the Day");
+                return Optional.empty();
+            }
+            
+            // Use day of year to ensure same recipe shows all day
+            LocalDate today = LocalDate.now();
+            int dayOfYear = today.getDayOfYear();
+            int recipeIndex = dayOfYear % allRecipes.size();
+            
+            Recipe dailyRecipe = allRecipes.get(recipeIndex);
+            log.info("Selected Recipe of the Day: {} (index: {}, day: {})", 
+                    dailyRecipe.getName(), recipeIndex, dayOfYear);
+            
+            return Optional.of(dailyRecipe);
+        } catch (Exception e) {
+            log.error("Error fetching Recipe of the Day", e);
+            return Optional.empty();
+        }
     }
     
     /**

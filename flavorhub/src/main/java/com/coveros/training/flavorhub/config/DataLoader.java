@@ -124,7 +124,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe carbonara = new Recipe(
             "Classic Spaghetti Carbonara",
             "A traditional Italian pasta dish with eggs, cheese, and pancetta",
-            15, 15, 4, "Medium", "Italian"
+            15, 15, 4, "Medium", "Italian",
+            4.7, 234
         );
         carbonara.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Pasta", 1.0, "pounds", "spaghetti"),
@@ -144,7 +145,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe grilledChicken = new Recipe(
             "Grilled Chicken with Herbs",
             "Juicy grilled chicken breast seasoned with fresh herbs",
-            10, 20, 4, "Easy", "American"
+            10, 20, 4, "Easy", "American",
+            4.5, 189
         );
         grilledChicken.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Chicken Breast", 2.0, "pounds", ""),
@@ -166,7 +168,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe stirFry = new Recipe(
             "Quick Vegetable Stir-Fry",
             "Colorful mix of vegetables stir-fried in a savory sauce",
-            10, 10, 3, "Easy", "Asian"
+            10, 10, 3, "Easy", "Asian",
+            4.3, 156
         );
         stirFry.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Bell Pepper", 2.0, "whole", "sliced"),
@@ -188,7 +191,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe tomatoSoup = new Recipe(
             "Creamy Tomato Basil Soup",
             "A comforting soup perfect for any season",
-            15, 30, 6, "Easy", "Italian"
+            15, 30, 6, "Easy", "Italian",
+            4.8, 312
         );
         // NOTE: Ingredients and instructions intentionally incomplete
         // Workshop participants will use Copilot to complete this recipe
@@ -204,7 +208,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe tikkaMasala = new Recipe(
             "Chicken Tikka Masala",
             "Creamy Indian curry with marinated chicken in a rich tomato sauce",
-            20, 30, 6, "Medium", "Indian"
+            20, 30, 6, "Medium", "Indian",
+            4.9, 427
         );
         tikkaMasala.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Chicken Breast", 2.0, "pounds", "cut into chunks"),
@@ -232,7 +237,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe beefTacos = new Recipe(
             "Classic Beef Tacos",
             "Quick and delicious Mexican tacos with seasoned ground beef",
-            10, 15, 4, "Easy", "Mexican"
+            10, 15, 4, "Easy", "Mexican",
+            4.6, 298
         );
         beefTacos.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Ground Beef", 1.0, "pounds", ""),
@@ -259,7 +265,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe quinoaSalad = new Recipe(
             "Mediterranean Quinoa Salad",
             "Fresh and healthy salad with quinoa, vegetables, and lemon dressing",
-            15, 15, 6, "Easy", "Mediterranean"
+            15, 15, 6, "Easy", "Mediterranean",
+            4.4, 176
         );
         quinoaSalad.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Quinoa", 1.5, "cups", ""),
@@ -285,7 +292,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe padThai = new Recipe(
             "Authentic Pad Thai",
             "Classic Thai stir-fried noodles with shrimp and peanuts",
-            25, 15, 4, "Medium", "Asian"
+            25, 15, 4, "Medium", "Asian",
+            4.7, 352
         );
         padThai.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Rice", 8.0, "cups", "rice noodles, dried"),
@@ -312,7 +320,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe risotto = new Recipe(
             "Creamy Mushroom Risotto",
             "Classic Italian rice dish with mushrooms and parmesan",
-            15, 35, 4, "Hard", "Italian"
+            15, 35, 4, "Hard", "Italian",
+            4.5, 203
         );
         risotto.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Rice", 1.5, "cups", "Arborio rice"),
@@ -341,7 +350,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe bourguignon = new Recipe(
             "Beef Bourguignon",
             "Classic French beef stew braised in red wine with vegetables",
-            30, 150, 6, "Hard", "French"
+            30, 150, 6, "Hard", "French",
+            4.8, 267
         );
         bourguignon.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Ground Beef", 3.0, "pounds", "chuck, cubed"),
@@ -372,7 +382,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe shrimpScampi = new Recipe(
             "Garlic Shrimp Scampi",
             "Succulent shrimp in a buttery garlic and white wine sauce",
-            10, 15, 4, "Medium", "Italian"
+            10, 15, 4, "Medium", "Italian",
+            4.6, 221
         );
         shrimpScampi.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Shrimp", 1.5, "pounds", "large, peeled and deveined"),
@@ -399,7 +410,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe greenCurry = new Recipe(
             "Thai Green Curry",
             "Aromatic Thai curry with vegetables in coconut milk",
-            15, 25, 4, "Medium", "Asian"
+            15, 25, 4, "Medium", "Asian",
+            4.4, 185
         );
         greenCurry.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Chicken Breast", 1.0, "pounds", "sliced thin"),
@@ -427,7 +439,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe margheritaPizza = new Recipe(
             "Classic Margherita Pizza",
             "Traditional Italian pizza with tomato, mozzarella, and fresh basil",
-            90, 15, 4, "Medium", "Italian"
+            90, 15, 4, "Medium", "Italian",
+            4.9, 412
         );
         margheritaPizza.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Flour", 3.0, "cups", "all-purpose"),
@@ -453,7 +466,8 @@ public class DataLoader implements CommandLineRunner {
         Recipe lavaCake = new Recipe(
             "Molten Chocolate Lava Cake",
             "Decadent individual chocolate cakes with a gooey molten center",
-            15, 12, 4, "Hard", "French"
+            15, 12, 4, "Hard", "French",
+            4.9, 389
         );
         lavaCake.getIngredients().addAll(Arrays.asList(
             new RecipeIngredient("Butter", 8.0, "tablespoons", "plus extra for ramekins"),

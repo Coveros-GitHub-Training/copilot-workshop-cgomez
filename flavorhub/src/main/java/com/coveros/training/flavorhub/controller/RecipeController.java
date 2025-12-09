@@ -42,6 +42,18 @@ public class RecipeController {
     }
     
     /**
+     * Get the recipe of the day
+     * Returns a deterministic recipe based on the current date
+     * @return ResponseEntity containing the recipe of the day
+     */
+    @GetMapping("/daily")
+    public ResponseEntity<Recipe> getDailyRecipe() {
+        return recipeService.getDailyRecipe()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    
+    /**
      * Get recipes by difficulty level
      * NOTE: Workshop participants will implement this endpoint using Copilot
      */

@@ -50,6 +50,12 @@ public class Recipe {
     @Column(name = "cuisine_type")
     private String cuisineType; // e.g., "Italian", "Mexican", "Asian"
     
+    @Column(name = "average_rating")
+    private Double averageRating; // Average star rating (1.0 to 5.0)
+    
+    @Column(name = "rating_count")
+    private Integer ratingCount; // Number of ratings received
+    
     @ElementCollection
     @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
     private List<RecipeIngredient> ingredients = new ArrayList<>();
@@ -71,5 +77,24 @@ public class Recipe {
         this.servings = servings;
         this.difficultyLevel = difficultyLevel;
         this.cuisineType = cuisineType;
+        this.averageRating = 0.0;
+        this.ratingCount = 0;
+    }
+    
+    /**
+     * Constructor with rating fields for seeding data
+     */
+    public Recipe(String name, String description, Integer prepTime, Integer cookTime, 
+                  Integer servings, String difficultyLevel, String cuisineType,
+                  Double averageRating, Integer ratingCount) {
+        this.name = name;
+        this.description = description;
+        this.prepTime = prepTime;
+        this.cookTime = cookTime;
+        this.servings = servings;
+        this.difficultyLevel = difficultyLevel;
+        this.cuisineType = cuisineType;
+        this.averageRating = averageRating;
+        this.ratingCount = ratingCount;
     }
 }
