@@ -50,6 +50,12 @@ public class Recipe {
     @Column(name = "cuisine_type")
     private String cuisineType; // e.g., "Italian", "Mexican", "Asian"
     
+    @Column(name = "average_rating")
+    private Double averageRating; // Average star rating (1.0 to 5.0)
+    
+    @Column(name = "rating_count")
+    private Integer ratingCount; // Number of ratings received
+    
     @ElementCollection
     @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
     private List<RecipeIngredient> ingredients = new ArrayList<>();
