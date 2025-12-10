@@ -80,4 +80,21 @@ public class Recipe {
         this.averageRating = 0.0;
         this.ratingCount = 0;
     }
+    
+    /**
+     * Constructor with rating fields for seeding data
+     */
+    public Recipe(String name, String description, Integer prepTime, Integer cookTime, 
+                  Integer servings, String difficultyLevel, String cuisineType,
+                  Double averageRating, Integer ratingCount) {
+        this.name = name;
+        this.description = description;
+        this.prepTime = prepTime;
+        this.cookTime = cookTime;
+        this.servings = servings;
+        this.difficultyLevel = difficultyLevel;
+        this.cuisineType = cuisineType;
+        this.averageRating = averageRating;
+        this.ratingCount = ratingCount;
+    }
 }
