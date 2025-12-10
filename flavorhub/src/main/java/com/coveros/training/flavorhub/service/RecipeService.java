@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -62,7 +63,7 @@ public class RecipeService {
         }
         
         Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new java.util.NoSuchElementException("Recipe not found with id: " + recipeId));
+                .orElseThrow(() -> new NoSuchElementException("Recipe not found with id: " + recipeId));
         
         // Calculate new average: ((oldRating * oldCount) + newRating) / (oldCount + 1)
         double currentAverage = recipe.getAverageRating() != null ? recipe.getAverageRating() : 0.0;

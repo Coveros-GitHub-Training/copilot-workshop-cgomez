@@ -46,8 +46,7 @@ class RecipeControllerTest {
     @Test
     void testRateRecipe_WhenValidRating_ThenReturnsOk() throws Exception {
         // Arrange
-        RecipeController.RatingRequest request = new RecipeController.RatingRequest();
-        request.setRating(5);
+        RecipeController.RatingRequest request = new RecipeController.RatingRequest(5);
         
         when(recipeService.addRating(eq(1L), eq(5))).thenReturn(testRecipe);
         
@@ -64,8 +63,7 @@ class RecipeControllerTest {
     @Test
     void testRateRecipe_WhenInvalidRating_ThenReturnsBadRequest() throws Exception {
         // Arrange
-        RecipeController.RatingRequest request = new RecipeController.RatingRequest();
-        request.setRating(6);
+        RecipeController.RatingRequest request = new RecipeController.RatingRequest(6);
         
         when(recipeService.addRating(eq(1L), eq(6)))
                 .thenThrow(new IllegalArgumentException("Rating must be between 1 and 5"));
@@ -80,8 +78,7 @@ class RecipeControllerTest {
     @Test
     void testRateRecipe_WhenRecipeNotFound_ThenReturnsNotFound() throws Exception {
         // Arrange
-        RecipeController.RatingRequest request = new RecipeController.RatingRequest();
-        request.setRating(5);
+        RecipeController.RatingRequest request = new RecipeController.RatingRequest(5);
         
         when(recipeService.addRating(eq(999L), eq(5)))
                 .thenThrow(new NoSuchElementException("Recipe not found"));
@@ -96,8 +93,7 @@ class RecipeControllerTest {
     @Test
     void testRateRecipe_WhenRatingBelowOne_ThenReturnsBadRequest() throws Exception {
         // Arrange
-        RecipeController.RatingRequest request = new RecipeController.RatingRequest();
-        request.setRating(0);
+        RecipeController.RatingRequest request = new RecipeController.RatingRequest(0);
         
         when(recipeService.addRating(eq(1L), eq(0)))
                 .thenThrow(new IllegalArgumentException("Rating must be between 1 and 5"));
