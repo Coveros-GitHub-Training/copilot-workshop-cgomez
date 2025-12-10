@@ -279,6 +279,27 @@
             background: #5a6268;
         }
         
+        .thank-you-message {
+            margin-top: 10px;
+            padding: 10px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 5px;
+            font-size: 0.9em;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .thank-you-message.show {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
         @media (max-width: 768px) {
             .recipe-rating {
                 flex-direction: column;
@@ -287,7 +308,7 @@
             }
             
             .interactive-stars {
-                font-size: 1.5em;
+                font-size: 2.2em;
             }
         }
     </style>
@@ -402,6 +423,9 @@
                                 <span data-value="4">★</span>
                                 <span data-value="5">★</span>
                             </div>
+                            <div class="thank-you-message" id="thank-you-${recipe.id}">
+                                ✓ Thank you for rating!
+                            </div>
                         </div>
                         <div class="recipe-footer">
                             <span class="difficulty ${(recipe.difficultyLevel || 'easy').toLowerCase()}">${escapeHtml(recipe.difficultyLevel || 'Easy')}</span>
@@ -496,17 +520,28 @@
                 starsElement.innerHTML = renderStars(updatedRecipe.averageRating);
                 ratingInfoElement.textContent = `${updatedRecipe.averageRating.toFixed(1)} stars (${updatedRecipe.ratingCount} ratings)`;
                 
-                // Close the widget
-                const widget = document.getElementById(`widget-${recipeId}`);
-                widget.classList.remove('active');
+                // Show thank you message
+                const thankYouMessage = document.getElementById(`thank-you-${recipeId}`);
+                thankYouMessage.classList.add('show');
                 
-                // Update the button
-                const buttons = document.querySelectorAll('.rate-button');
-                buttons.forEach(btn => {
-                    if (btn.textContent === 'Cancel') {
-                        btn.textContent = 'Rate Recipe';
-                    }
-                });
+                // Hide thank you message after 3 seconds
+                setTimeout(() => {
+                    thankYouMessage.classList.remove('show');
+                }, 3000);
+                
+                // Close the widget after a brief delay to show the message
+                setTimeout(() => {
+                    const widget = document.getElementById(`widget-${recipeId}`);
+                    widget.classList.remove('active');
+                    
+                    // Update the button
+                    const buttons = document.querySelectorAll('.rate-button');
+                    buttons.forEach(btn => {
+                        if (btn.textContent === 'Cancel') {
+                            btn.textContent = 'Rate Recipe';
+                        }
+                    });
+                }, 3000);
                 
                 // Update the recipe in the local array
                 const recipeIndex = recipes.findIndex(r => r.id === parseInt(recipeId));
