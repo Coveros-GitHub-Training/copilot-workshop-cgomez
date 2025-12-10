@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -48,6 +49,35 @@ public class RecipeService {
     
     public void deleteRecipe(Long id) {
         recipeRepository.deleteById(id);
+    }
+    
+    /**
+     * Add a rating to a recipe and update the average rating
+     * 
+     * @param recipeId the ID of the recipe to rate
+     * @param rating the rating value (1-5)
+     * @return the updated recipe
+     * @throws IllegalArgumentException if rating is not between 1 and 5
+     * @throws java.util.NoSuchElementException if recipe is not found
+     */
+    public Recipe addRating(Long recipeId, Integer rating) {
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+        
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NoSuchElementException("Recipe not found with id: " + recipeId));
+        
+        // Calculate new average: ((oldRating * oldCount) + newRating) / (oldCount + 1)
+        double currentAverage = recipe.getAverageRating() != null ? recipe.getAverageRating() : 0.0;
+        int currentCount = recipe.getRatingCount() != null ? recipe.getRatingCount() : 0;
+        
+        double newAverage = ((currentAverage * currentCount) + rating) / (currentCount + 1);
+        
+        recipe.setAverageRating(newAverage);
+        recipe.setRatingCount(currentCount + 1);
+        
+        return recipeRepository.save(recipe);
     }
     
     /**

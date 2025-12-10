@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * REST Controller for managing recipes
@@ -93,5 +94,33 @@ public class RecipeController {
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    /**
+     * Add a rating to a recipe
+     * 
+     * @param id the recipe ID
+     * @param request the rating request containing the rating value
+     * @return the updated recipe with new rating
+     */
+    @PutMapping("/{id}/rate")
+    public ResponseEntity<Recipe> rateRecipe(
+            @PathVariable Long id,
+            @RequestBody RatingRequest request) {
+        try {
+            Recipe updatedRecipe = recipeService.addRating(id, request.rating());
+            return ResponseEntity.ok(updatedRecipe);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    /**
+     * DTO for rating requests.
+     * Using a record to provide immutability and concise syntax for data transfer.
+     */
+    public record RatingRequest(Integer rating) {
     }
 }
