@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
@@ -19,16 +20,16 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
-        
+
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -37,47 +38,47 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         header h1 {
             font-size: 2em;
         }
-        
+
         .back-link {
             color: white;
             text-decoration: none;
             padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 5px;
             transition: background 0.3s;
         }
-        
+
         .back-link:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
-        
+
         .content {
             padding: 40px;
         }
-        
+
         .filters {
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
-        
+
         .filter-group {
             flex: 1;
             min-width: 200px;
         }
-        
+
         .filter-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: 500;
             color: #666;
         }
-        
+
         .filter-group select,
         .filter-group input {
             width: 100%;
@@ -85,46 +86,129 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1em;
+            transition: border-color 0.3s;
         }
-        
+
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .results-count {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .results-count .count {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .loading-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-size: 0.95em;
+        }
+
+        .loading-indicator.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .clear-filters {
+            padding: 8px 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .clear-filters:hover {
+            background: #5a6268;
+        }
+
+        .clear-filters:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .recipes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
+            transition: opacity 0.3s;
         }
-        
+
+        .recipes-grid.loading {
+            opacity: 0.5;
+        }
+
         .recipe-card {
             background: #f8f9fa;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .recipe-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        
+
         .recipe-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
         }
-        
+
         .recipe-header h3 {
             margin-bottom: 5px;
         }
-        
+
         .recipe-cuisine {
             font-size: 0.9em;
             opacity: 0.9;
         }
-        
+
         .recipe-body {
             padding: 20px;
         }
-        
+
         .recipe-meta {
             display: flex;
             justify-content: space-between;
@@ -132,13 +216,13 @@
             font-size: 0.9em;
             color: #666;
         }
-        
+
         .recipe-meta span {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        
+
         .difficulty {
             display: inline-block;
             padding: 3px 10px;
@@ -146,28 +230,39 @@
             font-size: 0.85em;
             font-weight: 500;
         }
-        
-        .difficulty.easy { background: #d4edda; color: #155724; }
-        .difficulty.medium { background: #fff3cd; color: #856404; }
-        .difficulty.hard { background: #f8d7da; color: #721c24; }
-        
+
+        .difficulty.easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty.medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty.hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
         .recipe-description {
             color: #666;
             margin-bottom: 15px;
             line-height: 1.5;
         }
-        
+
         .recipe-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .servings {
             color: #667eea;
             font-weight: 500;
         }
-        
+
         .view-recipe {
             padding: 8px 16px;
             background: #667eea;
@@ -176,22 +271,22 @@
             border-radius: 5px;
             transition: background 0.3s;
         }
-        
+
         .view-recipe:hover {
             background: #5568d3;
         }
-        
+
         .no-recipes {
             text-align: center;
             padding: 60px 20px;
             color: #666;
         }
-        
+
         .no-recipes h2 {
             color: #667eea;
             margin-bottom: 10px;
         }
-        
+
         /* Rating Styles */
         .recipe-rating {
             display: flex;
@@ -200,22 +295,22 @@
             margin-top: 10px;
             font-size: 0.9em;
         }
-        
+
         .stars {
             color: #667eea;
             font-size: 1.1em;
             letter-spacing: 2px;
         }
-        
+
         .stars .empty {
             color: #ddd;
         }
-        
+
         .rating-info {
             color: #666;
             font-size: 0.85em;
         }
-        
+
         .rating-widget {
             margin-top: 15px;
             padding: 15px;
@@ -223,38 +318,38 @@
             border-radius: 5px;
             display: none;
         }
-        
+
         .rating-widget.active {
             display: block;
         }
-        
+
         .rating-widget h4 {
             margin-bottom: 10px;
             color: #333;
             font-size: 0.95em;
         }
-        
+
         .interactive-stars {
             display: flex;
             gap: 5px;
             font-size: 1.8em;
             cursor: pointer;
         }
-        
+
         .interactive-stars span {
             color: #ddd;
             transition: color 0.2s;
         }
-        
+
         .interactive-stars span:hover,
         .interactive-stars span.hover {
             color: #667eea;
         }
-        
+
         .interactive-stars span.selected {
             color: #667eea;
         }
-        
+
         .rate-button {
             padding: 6px 12px;
             background: #667eea;
@@ -265,20 +360,20 @@
             font-size: 0.85em;
             transition: background 0.3s;
         }
-        
+
         .rate-button:hover {
             background: #5568d3;
         }
-        
+
         .rate-button.cancel {
             background: #6c757d;
             margin-left: 8px;
         }
-        
+
         .rate-button.cancel:hover {
             background: #5a6268;
         }
-        
+
         .thank-you-message {
             margin-top: 10px;
             padding: 10px;
@@ -290,38 +385,49 @@
             display: none;
             animation: fadeIn 0.3s;
         }
-        
+
         .thank-you-message.show {
             display: block;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
-        
+
         @media (max-width: 768px) {
             .recipe-rating {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 5px;
             }
-            
+
             .interactive-stars {
                 font-size: 2.2em;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
             <h1>🍳 Browse Recipes</h1>
             <a href="/" class="back-link">← Back to Home</a>
         </header>
-        
+
         <div class="content">
             <div class="filters">
+                <div class="filter-group">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" placeholder="Search recipes..." autocomplete="off">
+                </div>
+
                 <div class="filter-group">
                     <label for="difficulty">Difficulty</label>
                     <select id="difficulty">
@@ -331,7 +437,7 @@
                         <option value="Hard">Hard</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group">
                     <label for="cuisine">Cuisine</label>
                     <select id="cuisine">
@@ -343,28 +449,38 @@
                         <option value="Mediterranean">Mediterranean</option>
                     </select>
                 </div>
-                
-                <div class="filter-group">
-                    <label for="search">Search</label>
-                    <input type="text" id="search" placeholder="Search recipes...">
-                </div>
             </div>
-            
+
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">
+                    Showing <span class="count">0</span> recipes
+                </div>
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <span>Searching...</span>
+                </div>
+                <button class="clear-filters" id="clearFilters" onclick="clearAllFilters()">
+                    Clear Filters
+                </button>
+            </div>
+
             <div class="recipes-grid" id="recipesGrid">
-                <!-- TODO: Populate recipes dynamically from API -->
+                <!-- Recipes will be populated dynamically from API -->
                 <div class="no-recipes">
-                    <h2>No Recipes Found</h2>
-                    <p>Try adjusting your filters or check back later!</p>
+                    <h2>Loading Recipes...</h2>
+                    <p>Please wait while we fetch the recipes.</p>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         // Fetch and display recipes
         let recipes = [];
-        
+        let searchTimeout = null;
+
         async function loadRecipes() {
+            showLoading(true);
             try {
                 const response = await fetch('/api/recipes');
                 if (!response.ok) {
@@ -372,6 +488,8 @@
                 }
                 recipes = await response.json();
                 displayRecipes(recipes);
+                updateResultsCount(recipes.length);
+                updateClearButton();
             } catch (error) {
                 console.error('Error loading recipes:', error);
                 document.getElementById('recipesGrid').innerHTML = `
@@ -380,12 +498,54 @@
                         <p>Unable to load recipes. Please try again later.</p>
                     </div>
                 `;
+            } finally {
+                showLoading(false);
             }
         }
-        
+
+        function showLoading(isLoading) {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const recipesGrid = document.getElementById('recipesGrid');
+
+            if (isLoading) {
+                loadingIndicator.classList.add('active');
+                recipesGrid.classList.add('loading');
+            } else {
+                loadingIndicator.classList.remove('active');
+                recipesGrid.classList.remove('loading');
+            }
+        }
+
+        function updateResultsCount(count) {
+            const resultsCount = document.getElementById('resultsCount');
+            const countSpan = resultsCount.querySelector('.count');
+            countSpan.textContent = count;
+
+            if (count === 1) {
+                resultsCount.innerHTML = `Showing <span class="count">1</span> recipe`;
+            } else {
+                resultsCount.innerHTML = `Showing <span class="count">${count}</span> recipes`;
+            }
+        }
+
+        function updateClearButton() {
+            const clearButton = document.getElementById('clearFilters');
+            const hasFilters = document.getElementById('search').value !== '' ||
+                document.getElementById('difficulty').value !== '' ||
+                document.getElementById('cuisine').value !== '';
+            clearButton.disabled = !hasFilters;
+        }
+
+        function clearAllFilters() {
+            document.getElementById('search').value = '';
+            document.getElementById('difficulty').value = '';
+            document.getElementById('cuisine').value = '';
+            filterRecipes();
+        }
+
         function displayRecipes(recipesToDisplay) {
             const grid = document.getElementById('recipesGrid');
-            
+
             if (recipesToDisplay.length === 0) {
                 grid.innerHTML = `
                     <div class="no-recipes">
@@ -395,7 +555,7 @@
                 `;
                 return;
             }
-            
+
             grid.innerHTML = recipesToDisplay.map(recipe => `
                 <div class="recipe-card">
                     <div class="recipe-header">
@@ -434,34 +594,34 @@
                     </div>
                 </div>
             `).join('');
-            
+
             // Add event listeners to interactive stars
             document.querySelectorAll('.interactive-stars').forEach(stars => {
                 const recipeId = stars.dataset.recipeId;
                 const starElements = stars.querySelectorAll('span');
-                
+
                 starElements.forEach((star, index) => {
                     star.addEventListener('mouseover', () => {
                         highlightStars(starElements, index + 1);
                     });
-                    
+
                     star.addEventListener('click', () => {
                         submitRating(recipeId, index + 1);
                     });
                 });
-                
+
                 stars.addEventListener('mouseleave', () => {
                     clearHighlight(starElements);
                 });
             });
         }
-        
+
         function renderStars(rating) {
             const fullStars = Math.floor(rating);
             const emptyStars = 5 - fullStars;
             return '★'.repeat(fullStars) + '<span class="empty">★</span>'.repeat(emptyStars);
         }
-        
+
         function highlightStars(stars, count) {
             stars.forEach((star, index) => {
                 if (index < count) {
@@ -471,15 +631,15 @@
                 }
             });
         }
-        
+
         function clearHighlight(stars) {
             stars.forEach(star => star.classList.remove('hover'));
         }
-        
+
         function toggleRatingWidget(recipeId) {
             const widget = document.getElementById(`widget-${recipeId}`);
             const button = event.target;
-            
+
             if (widget.classList.contains('active')) {
                 widget.classList.remove('active');
                 button.textContent = 'Rate Recipe';
@@ -491,12 +651,12 @@
                 document.querySelectorAll('.rate-button').forEach(b => {
                     b.textContent = 'Rate Recipe';
                 });
-                
+
                 widget.classList.add('active');
                 button.textContent = 'Cancel';
             }
         }
-        
+
         async function submitRating(recipeId, rating) {
             try {
                 const response = await fetch(`/api/recipes/${recipeId}/rate`, {
@@ -506,34 +666,34 @@
                     },
                     body: JSON.stringify({ rating: rating })
                 });
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to submit rating');
                 }
-                
+
                 const updatedRecipe = await response.json();
-                
+
                 // Update the display
                 const starsElement = document.getElementById(`stars-${recipeId}`);
                 const ratingInfoElement = document.getElementById(`rating-info-${recipeId}`);
-                
+
                 starsElement.innerHTML = renderStars(updatedRecipe.averageRating);
                 ratingInfoElement.textContent = `${updatedRecipe.averageRating.toFixed(1)} stars (${updatedRecipe.ratingCount} ratings)`;
-                
+
                 // Show thank you message
                 const thankYouMessage = document.getElementById(`thank-you-${recipeId}`);
                 thankYouMessage.classList.add('show');
-                
+
                 // Hide thank you message after 3 seconds
                 setTimeout(() => {
                     thankYouMessage.classList.remove('show');
                 }, 3000);
-                
+
                 // Close the widget after a brief delay to show the message
                 setTimeout(() => {
                     const widget = document.getElementById(`widget-${recipeId}`);
                     widget.classList.remove('active');
-                    
+
                     // Update the button
                     const buttons = document.querySelectorAll('.rate-button');
                     buttons.forEach(btn => {
@@ -542,51 +702,79 @@
                         }
                     });
                 }, 3000);
-                
+
                 // Update the recipe in the local array
                 const recipeIndex = recipes.findIndex(r => r.id === parseInt(recipeId));
                 if (recipeIndex !== -1) {
                     recipes[recipeIndex] = updatedRecipe;
                 }
-                
+
             } catch (error) {
                 console.error('Error submitting rating:', error);
                 alert('Failed to submit rating. Please try again.');
             }
         }
-        
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-        
-        // Filtering functionality
+
+        // Filtering functionality with debouncing for search
         function filterRecipes() {
-            const difficulty = document.getElementById('difficulty').value;
-            const cuisine = document.getElementById('cuisine').value;
-            const searchTerm = document.getElementById('search').value.toLowerCase();
-            
-            const filtered = recipes.filter(recipe => {
-                const matchesDifficulty = !difficulty || recipe.difficultyLevel === difficulty;
-                const matchesCuisine = !cuisine || recipe.cuisineType === cuisine;
-                const matchesSearch = !searchTerm || 
-                    recipe.name.toLowerCase().includes(searchTerm) ||
-                    (recipe.description && recipe.description.toLowerCase().includes(searchTerm));
-                
-                return matchesDifficulty && matchesCuisine && matchesSearch;
-            });
-            
-            displayRecipes(filtered);
+            showLoading(true);
+
+            // Clear any existing timeout
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+
+            // Debounce search input - wait 300ms after user stops typing
+            searchTimeout = setTimeout(() => {
+                const difficulty = document.getElementById('difficulty').value;
+                const cuisine = document.getElementById('cuisine').value;
+                const searchTerm = document.getElementById('search').value.toLowerCase();
+
+                const filtered = recipes.filter(recipe => {
+                    const matchesDifficulty = !difficulty || recipe.difficultyLevel === difficulty;
+                    const matchesCuisine = !cuisine || recipe.cuisineType === cuisine;
+                    const matchesSearch = !searchTerm ||
+                        recipe.name.toLowerCase().includes(searchTerm) ||
+                        (recipe.description && recipe.description.toLowerCase().includes(searchTerm));
+
+                    return matchesDifficulty && matchesCuisine && matchesSearch;
+                });
+
+                displayRecipes(filtered);
+                updateResultsCount(filtered.length);
+                updateClearButton();
+                showLoading(false);
+            }, 300);
         }
-        
+
         // Add event listeners to filters
-        document.getElementById('difficulty').addEventListener('change', filterRecipes);
-        document.getElementById('cuisine').addEventListener('change', filterRecipes);
+        document.getElementById('difficulty').addEventListener('change', () => {
+            // Clear timeout and filter immediately for select changes
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            filterRecipes();
+        });
+
+        document.getElementById('cuisine').addEventListener('change', () => {
+            // Clear timeout and filter immediately for select changes
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            filterRecipes();
+        });
+
         document.getElementById('search').addEventListener('input', filterRecipes);
-        
+
         // Load recipes on page load
         loadRecipes();
     </script>
 </body>
+
 </html>

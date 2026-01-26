@@ -556,6 +556,44 @@
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
+        .search-loading-indicator {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            align-items: center;
+            gap: 5px;
+            color: #667eea;
+            font-size: 0.85em;
+            z-index: 10;
+        }
+
+        .search-loading-indicator.active {
+            display: flex;
+        }
+
+        .search-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .results-status {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .results-status .count {
+            color: #667eea;
+            font-weight: 600;
+        }
+
         .search-clear-btn {
             position: absolute;
             right: 15px;
@@ -1025,9 +1063,13 @@
                 <div class="search-box-container">
                     <input type="text" class="search-input" id="recipeSearchInput"
                         placeholder="Search for recipes by name, cuisine, or ingredients..." autocomplete="off" />
+                    <div class="search-loading-indicator" id="searchLoadingIndicator">
+                        <div class="search-spinner"></div>
+                    </div>
                     <button class="search-clear-btn" id="searchClearBtn" title="Clear search">×</button>
                     <div class="search-suggestions" id="searchSuggestions"></div>
                 </div>
+                <div class="results-status" id="resultsStatus"></div>
                 <div class="search-results" id="searchResults"></div>
             </div>
 
@@ -1118,12 +1160,35 @@
             const searchClearBtn = document.getElementById('searchClearBtn');
             const searchSuggestions = document.getElementById('searchSuggestions');
             const searchResults = document.getElementById('searchResults');
+            const searchLoadingIndicator = document.getElementById('searchLoadingIndicator');
+            const resultsStatus = document.getElementById('resultsStatus');
 
             let debounceTimer;
             let currentSuggestionIndex = -1;
             let allRecipes = [];
             let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
             const MAX_RECENT_SEARCHES = 5;
+
+            // Show/hide loading indicator
+            function showSearchLoading(isLoading) {
+                if (isLoading) {
+                    searchLoadingIndicator.classList.add('active');
+                } else {
+                    searchLoadingIndicator.classList.remove('active');
+                }
+            }
+
+            // Update results status
+            function updateResultsStatus(count, query) {
+                if (count === 0 && query) {
+                    resultsStatus.innerHTML = '';
+                } else if (count > 0) {
+                    const recipeText = count === 1 ? 'recipe' : 'recipes';
+                    resultsStatus.innerHTML = `Found <span class="count">${count}</span> ${recipeText}`;
+                } else {
+                    resultsStatus.innerHTML = '';
+                }
+            }
 
             // Show/hide clear button based on input
             function updateClearButton() {
@@ -1150,7 +1215,7 @@
                 }
             });
 
-            // Debounce search to avoid excessive API calls
+            // Debounce search to avoid excessive API calls (300ms like recipes page)
             searchInput.addEventListener('input', function (e) {
                 const query = e.target.value.trim();
                 updateClearButton();
@@ -1164,10 +1229,15 @@
                         hideSuggestions();
                     }
                     clearResults();
+                    updateResultsStatus(0, '');
+                    showSearchLoading(false);
                     return;
                 }
 
-                // Wait 300ms after user stops typing
+                // Show loading immediately when user types
+                showSearchLoading(true);
+
+                // Wait 300ms after user stops typing (consistent with recipes page)
                 debounceTimer = setTimeout(() => {
                     searchRecipes(query);
                     saveRecentSearch(query);
@@ -1269,9 +1339,14 @@
                     // Show full results
                     displayResults(recipes);
 
+                    // Update results count
+                    updateResultsStatus(recipes.length, query);
+
                 } catch (error) {
                     console.error('Error searching recipes:', error);
                     showErrorMessage();
+                } finally {
+                    showSearchLoading(false);
                 }
             }
 
@@ -1374,6 +1449,7 @@
             function clearResults() {
                 searchResults.innerHTML = '';
                 searchResults.classList.remove('slide-in');
+                updateResultsStatus(0, '');
             }
 
             // Show error message
@@ -1387,6 +1463,8 @@
                 `;
                 searchResults.classList.remove('slide-in');
                 setTimeout(() => searchResults.classList.add('slide-in'), 10);
+                updateResultsStatus(0, '');
+                showSearchLoading(false);
             }
 
             // Escape HTML to prevent XSS
